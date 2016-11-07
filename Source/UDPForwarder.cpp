@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -22,6 +22,11 @@
 #include "SocketDefines.h"
 #include "VitaIncludes.h"
 #include "errno.h"
+
+
+#if (defined(__GNUC__)  || defined(__GCCXML__)) && !defined(__WIN32__)
+#include <netdb.h>
+#endif
 
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1

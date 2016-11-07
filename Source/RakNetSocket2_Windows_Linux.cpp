@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -14,6 +14,10 @@
 
 #ifndef RAKNETSOCKET2_WINDOWS_LINUX_CPP
 #define RAKNETSOCKET2_WINDOWS_LINUX_CPP
+
+#if (defined(__GNUC__)  || defined(__GCCXML__)) && !defined(__WIN32__)
+#include <netdb.h>
+#endif
 
 #if !defined(WINDOWS_STORE_RT) && !defined(__native_client__)
 
@@ -64,9 +68,6 @@ void GetMyIP_Windows_Linux_IPV4And6( SystemAddress addresses[MAXIMUM_NUMBER_OF_I
 
 #else
 
-#if (defined(__GNUC__)  || defined(__GCCXML__)) && !defined(__WIN32__)
-#include <netdb.h>
-#endif
 void GetMyIP_Windows_Linux_IPV4( SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS] )
 {
 
