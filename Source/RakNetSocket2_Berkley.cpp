@@ -322,6 +322,13 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 		ret = bind__(rns2Socket, aip->ai_addr, (int) aip->ai_addrlen );
 		if (ret>=0)
 		{
+            
+			if (aip->ai_family == AF_INET6) {
+				int no = 0;
+				// Allow mapped IPv4 addresses by disabling IPV6_V6ONLY option.
+				setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no)):
+			}
+            
 			// Is this valid?
 			memcpy(&boundAddress.address.addr6, aip->ai_addr, sizeof(boundAddress.address.addr6));
 
