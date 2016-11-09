@@ -15,6 +15,8 @@
 #ifndef RAKNETSOCKET2_BERKLEY_CPP
 #define RAKNETSOCKET2_BERKLEY_CPP
 
+#include "SocketLayer.h"
+
 // Every platform except windows store 8 and native client supports Berkley sockets
 #if !defined(WINDOWS_STORE_RT) && !defined(__native_client__)
 
@@ -263,6 +265,8 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4( RNS2_BerkleyBindParameters *bindPar
 	return BR_SUCCESS;
 
 }
+#include <arpa/inet.h>
+#include <debug.h>
 RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bindParameters, const char *file, unsigned int line ) {
 	
 	(void) file;
@@ -290,7 +294,10 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 	{
 		getaddrinfo(bindParameters->hostAddress, portStr, &hints, &servinfo);
 	}
-
+		HactNet::Debug::InternalDebugPrint(
+            "RakNet::RNS2_Berkley::BindSharedIPV4And6",
+            "-------------------------------------"
+        );
 	// Try all returned addresses until one works
 	for (aip = servinfo; aip != NULL; aip = aip->ai_next)
 	{
@@ -301,17 +308,25 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 		if (rns2Socket == -1)
 			return BR_FAILED_TO_BIND_SOCKET;
 
+		char dst[aip->ai_addrlen];
+		inet_ntop(aip->ai_family, aip->ai_addr, dst, aip->ai_addrlen);
+		HactNet::Debug::InternalDebugPrint(
+            "RakNet::RNS2_Berkley::BindSharedIPV4And6",
+            "The address: %s",
+            &dst
+        );
+		
+
+
+		int result = RakNet::SocketLayer::DisableIpv6V6only(rns2Socket, aip->ai_family);
 
 
 
-
-
-
-
-
-
-
-
+		HactNet::Debug::InternalDebugPrint(
+            "RakNet::RNS2_Berkley::BindSharedIPV4And6",
+            "DisableIpv6V6only result: %d",
+            result
+        );
 
 
 
@@ -320,14 +335,13 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 
 
 		ret = bind__(rns2Socket, aip->ai_addr, (int) aip->ai_addrlen );
+		HactNet::Debug::InternalDebugPrint(
+            "RakNet::RNS2_Berkley::BindSharedIPV4And6",
+            "Bind result: %d   errno: %d",
+            ret, errno
+        );
 		if (ret>=0)
 		{
-            
-			if (aip->ai_family == AF_INET6) {
-				int no = 0;
-				// Allow mapped IPv4 addresses by disabling IPV6_V6ONLY option.
-				setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no));
-			}
             
 			// Is this valid?
 			memcpy(&boundAddress.address.addr6, aip->ai_addr, sizeof(boundAddress.address.addr6));

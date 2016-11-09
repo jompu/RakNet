@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -110,9 +110,42 @@ void PrepareAddrInfoHints(addrinfo *hints)
 	hints->ai_flags = AI_PASSIVE;     // fill in my IP for me
 }
 #endif
- 
+
+
+int SocketLayer::DisableIpv6V6only( int socket, int ai_family) {
+	if (ai_family == AF_INET6) {
+		int no = 0;
+		int result = 0;
+		// Allow mapped IPv4 addresses by disabling IPV6_V6ONLY option.
+		result = setsockopt__(socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no));
+	
+		if (result < 0) {
+			return result;
+		}
+		
+		int enable = 1;
+		result = setsockopt__(socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
+		
+		if (result < 0) {
+			return result;
+		}
+		
+		//fcntl(socket, F_SETFL, O_NONBLOCK);
+		
+		return 1;
+	}
+	
+	return 0;
+}
+
 void SocketLayer::SetSocketOptions( __UDPSOCKET__ listenSocket, bool blockingSocket, bool setBroadcast)
 {
+	
+	
+	
+	
+	
+	
 #ifdef __native_client__
 	(void) listenSocket;
 #else
@@ -538,7 +571,7 @@ void SocketLayer::GetSystemAddress ( __UDPSOCKET__ s, SystemAddress *systemAddre
 		memcpy(&systemAddressOut->address.addr4,(sockaddr_in *)&ss,sizeof(sockaddr_in));
 		systemAddressOut->debugPort=ntohs(systemAddressOut->address.addr4.sin_port);
 
-		uint32_t zero = 0;		
+		uint32_t zero = 0;
 		if (memcmp(&systemAddressOut->address.addr4.sin_addr.s_addr, &zero, sizeof(zero))==0)
 			systemAddressOut->SetToLoopback(4);
 		//	systemAddressOut->address.addr4.sin_port=ntohs(systemAddressOut->address.addr4.sin_port);
@@ -580,7 +613,7 @@ bool SocketLayer::GetFirstBindableIP(char firstBindable[128], int ipProto)
 	{
 		ipList[0].ToString(false,firstBindable);
 		return true;
-	}		
+	}
 
 	// Find the first valid host address
 	unsigned int l;

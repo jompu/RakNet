@@ -504,6 +504,8 @@ void UDPForwarder::UpdateUDPForwarder(void)
 					fe->socket = socket__(aip->ai_family, aip->ai_socktype, aip->ai_protocol);
 					if (fe->socket != INVALID_SOCKET)
 					{
+						RakNet::SocketLayer::DisableIpv6V6only(fe->socket, aip->ai_family);
+						
 						int ret = bind__( fe->socket, aip->ai_addr, (int) aip->ai_addrlen );
 						if (ret>=0)
 						{
