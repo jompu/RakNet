@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -64,6 +64,10 @@ STATIC_FACTORY_DEFINITIONS(TCPInterface,TCPInterface);
 
 TCPInterface::TCPInterface()
 {
+#if RAKNET_SUPPORT_IPV6==1
+	RakAssert("TCPInterface does not have dual socket for ipv6 implemented." && 0);
+#endif
+
 #if !defined(WINDOWS_STORE_RT)
 	listenSocket=0;
 #endif
@@ -147,6 +151,7 @@ bool TCPInterface::CreateListenSocket(unsigned short port, unsigned short maxInc
 		if (listenSocket != 0)
 		{
 			int ret = bind__( listenSocket, aip->ai_addr, (int) aip->ai_addrlen );
+			
 			if (ret>=0)
 			{
 				break;
@@ -270,7 +275,7 @@ void TCPInterface::Stop(void)
 #ifdef _WIN32
 		shutdown__(listenSocket, SD_BOTH);
 
-#else		
+#else
 		shutdown__(listenSocket, SHUT_RDWR);
 #endif
 		closesocket__(listenSocket);
@@ -414,7 +419,7 @@ SystemAddress TCPInterface::Connect(const char* host, unsigned short remotePort,
 			failedConnectionAttempts.Push(s->systemAddress, _FILE_AND_LINE_ );
 		}
 		return UNASSIGNED_SYSTEM_ADDRESS;
-	}	
+	}
 }
 #if OPEN_SSL_CLIENT_SUPPORT==1
 void TCPInterface::StartSSLClient(SystemAddress systemAddress)
@@ -805,7 +810,7 @@ __TCPSOCKET__ TCPInterface::SocketConnect(const char* host, unsigned short remot
 		__TCPSOCKET__ sockfd = WinRTCreateStreamSocket(AF_INET, SOCK_STREAM, 0);
 	#else
 		__TCPSOCKET__ sockfd = socket__(AF_INET, SOCK_STREAM, 0);
-		if (sockfd < 0) 
+		if (sockfd < 0)
 			return 0;
 	#endif
 
@@ -925,7 +930,7 @@ RAK_THREAD_DECLARATION(RakNet::ConnectionAttemptLoop)
 		tcpInterface->completedConnectionAttemptMutex.Lock();
 		tcpInterface->completedConnectionAttempts.Push(systemAddress, _FILE_AND_LINE_ );
 		tcpInterface->completedConnectionAttemptMutex.Unlock();
-	}	
+	}
 
 
 
@@ -1051,7 +1056,7 @@ RAK_THREAD_DECLARATION(RakNet::UpdateTCPInterfaceLoop)
 #endif
 
 
-			selectResult=(int) select__(largestDescriptor+1, &readFD, &writeFD, &exceptionFD, &tv);		
+			selectResult=(int) select__(largestDescriptor+1, &readFD, &writeFD, &exceptionFD, &tv);
 
 
 
@@ -1153,7 +1158,7 @@ RAK_THREAD_DECLARATION(RakNet::UpdateTCPInterfaceLoop)
 // 							in.s_addr = sts->remoteClients[i].systemAddress.binaryAddress;
 // 							RAKNET_DEBUG_PRINTF("Socket error %i on %s:%i\n", err,inet_ntoa( in ), sts->remoteClients[i].systemAddress.GetPort() );
 // 						}
-// 						
+//
 // #endif
 						// Connection lost abruptly
 						SystemAddress *lostConnectionSystemAddress=sts->lostConnections.Allocate( _FILE_AND_LINE_ );
@@ -1313,8 +1318,8 @@ bool RemoteClient::InitSSL(SSL_CTX* ctx, SSL_METHOD *meth)
 {
 	(void) meth;
 
-	ssl = SSL_new (ctx);                         
-	RakAssert(ssl);    
+	ssl = SSL_new (ctx);
+	RakAssert(ssl);
 	int res;
 	res = SSL_set_fd (ssl, socket);
 	if (res!=1)
@@ -1336,7 +1341,7 @@ bool RemoteClient::InitSSL(SSL_CTX* ctx, SSL_METHOD *meth)
 	}
 	else if (res==0)
 	{
-		// The TLS/SSL handshake was not successful but was shut down controlled and by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the return value ret to find out the reason. 
+		// The TLS/SSL handshake was not successful but was shut down controlled and by the specifications of the TLS/SSL protocol. Call SSL_get_error() with the return value ret to find out the reason.
 		int err = SSL_get_error(ssl, res);
 		switch (err)
 		{

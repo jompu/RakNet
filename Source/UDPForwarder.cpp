@@ -54,6 +54,10 @@ UDPForwarder::ForwardEntry::~ForwardEntry() {
 
 UDPForwarder::UDPForwarder()
 {
+#if RAKNET_SUPPORT_IPV6==1
+	RakAssert("UDPForwarder does not have dual socket for ipv6 implemented." && 0);
+#endif
+
 #ifdef _WIN32
 	WSAStartupSingleton::AddRef();
 #endif

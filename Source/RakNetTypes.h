@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -182,6 +182,9 @@ struct RAK_DLL_EXPORT SocketDescriptor
 
 	/// XBOX only: set IPPROTO_VDP if you want to use VDP. If enabled, this socket does not support broadcast to 255.255.255.255
 	unsigned int extraSocketOptions;
+	
+	// Enable dual socket for IPv6.
+	bool dualSocket;
 };
 
 extern bool NonNumericHostString( const char *host );

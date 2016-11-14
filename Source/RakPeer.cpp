@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -185,7 +185,7 @@ Packet *RakPeer::AllocPacket(unsigned dataSize, unsigned char *data, const char 
 	return p;
 }
 
-STATIC_FACTORY_DEFINITIONS(RakPeerInterface,RakPeer) 
+STATIC_FACTORY_DEFINITIONS(RakPeerInterface,RakPeer)
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Constructor
@@ -486,6 +486,7 @@ StartupResult RakPeer::Startup( unsigned int maxConnections, SocketDescriptor *s
 		ncbp.is_ipv6=socketDescriptors[i].socketFamily==AF_INET6;
 		ncbp.nativeClientInstance=socketDescriptors[i].chromeInstance;
 		ncbp.port=socketDescriptors[i].port;
+		ncbp.dualSocket=socketDescriptors[i].dualSocket;
 		nativeClientSocket->Bind(&ncbp, _FILE_AND_LINE_);
 		#elif defined(WINDOWS_STORE_RT)
 		RNS2BindResult br;
@@ -512,6 +513,7 @@ StartupResult RakPeer::Startup( unsigned int maxConnections, SocketDescriptor *s
 			bbp.doNotFragment=false;
 			bbp.pollingThreadPriority=threadPriority;
 			bbp.eventHandler=this;
+			bbp.dualSocket=socketDescriptors[i].dualSocket;
 			bbp.remotePortRakNetWasStartedOn_PS3_PS4_PSP2=socketDescriptors[i].remotePortRakNetWasStartedOn_PS3_PSP2;
 			RNS2BindResult br = ((RNS2_Berkley*) r2)->Bind(&bbp, _FILE_AND_LINE_);
 
@@ -6401,7 +6403,7 @@ RAK_THREAD_DECLARATION(RakNet::UpdateNetworkLoop)
 		+ cat::AuthenticatedEncryption::OVERHEAD_BYTES
 #endif
 		);
-// 
+//
 	rakPeer->isMainLoopThreadActive = true;
 
 	while ( rakPeer->endThreads == false )
