@@ -87,7 +87,7 @@ bool RakNet::NonNumericHostString( const char *host )
 }
 
 SocketDescriptor::SocketDescriptor() {
-	dualSocket = true;
+	dualSocket = false;
 	
 #ifdef __native_client__
 	blockingSocket=false;
@@ -97,7 +97,7 @@ SocketDescriptor::SocketDescriptor() {
 	port=0; hostAddress[0]=0; remotePortRakNetWasStartedOn_PS3_PSP2=0; extraSocketOptions=0; socketFamily=AF_INET;}
 SocketDescriptor::SocketDescriptor(unsigned short _port, const char *_hostAddress)
 {
-	dualSocket = true;
+	dualSocket = false;
 	
 	#ifdef __native_client__
 		blockingSocket=false;
