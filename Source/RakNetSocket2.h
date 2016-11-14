@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -191,6 +191,7 @@ struct NativeClientBindParameters
 	unsigned short port;
 	const char *forceHostAddress;
 	bool is_ipv6;
+	bool dualSocket;
 	RNS2EventHandler *eventHandler;
 };
 class RNS2_NativeClient;
@@ -216,7 +217,7 @@ public:
 	// It causes recvfrom events to trigger the callback, and push a message to the event handler
 	//
 	// Example:
-	// 
+	//
 	// DataStructures::List< RakNet::RakNetSocket2* > sockets;
 	// rakPeerInterface->GetSockets(sockets);
 	// for (unsigned int i=0; i < sockets.Size(); i++)
@@ -283,6 +284,7 @@ struct RNS2_BerkleyBindParameters
 	int doNotFragment;
 	int pollingThreadPriority;
 	RNS2EventHandler *eventHandler;
+	bool dualSocket;
 	unsigned short remotePortRakNetWasStartedOn_PS3_PS4_PSP2;
 };
 

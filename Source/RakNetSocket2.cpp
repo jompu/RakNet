@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -271,11 +271,11 @@ void RNS2_NativeClient::Update(void)
 	// Don't send until bound
 	if (bindState==BS_BOUND)
 	{
-		do 
+		do
 		{
 			ProcessBufferedSend();
 		} while (sendInProgress==false && bufferedSends.Size()>1);
-	}	
+	}
 }
 
 #else // defined(__native_client__)
@@ -285,7 +285,7 @@ bool IRNS2_Berkley::IsPortInUse(unsigned short port, const char *hostAddress, un
 	bbp.port=port; bbp.hostAddress=(char*) hostAddress;	bbp.addressFamily=addressFamily;
 	bbp.type=type; bbp.protocol=0; bbp.nonBlockingSocket=false;
 	bbp.setBroadcast=false;	bbp.doNotFragment=false; bbp.protocol=0;
-	bbp.setIPHdrIncl=false;
+	bbp.setIPHdrIncl=false;	bbp.dualSocket=false;
 	SystemAddress boundAddress;
 	RNS2_Berkley *rns2 = (RNS2_Berkley*) RakNetSocket2Allocator::AllocRNS2();
 	RNS2BindResult bindResult = rns2->Bind(&bbp, _FILE_AND_LINE_);
@@ -295,7 +295,7 @@ bool IRNS2_Berkley::IsPortInUse(unsigned short port, const char *hostAddress, un
 
 #if defined(__APPLE__)
 void SocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info)
-// This C routine is called by CFSocket when there's data waiting on our 
+// This C routine is called by CFSocket when there's data waiting on our
 // UDP socket.  It just redirects the call to Objective-C code.
 { }
 #endif
@@ -503,7 +503,7 @@ RNS2SendResult RNS2_Windows::Send( RNS2_SendParameters *sendParameters, const ch
 		len = slo->RakNetSendTo(sendParameters->data, sendParameters->length,sendParameters->systemAddress);
 		if (len>=0)
 			return len;
-	} 
+	}
 	return Send_Windows_Linux_360NoVDP(rns2Socket,sendParameters, file, line);
 }
 void RNS2_Windows::GetMyIP( SystemAddress addresses[MAXIMUM_NUMBER_OF_INTERNAL_IDS] ) {return GetMyIP_Windows_Linux(addresses);}

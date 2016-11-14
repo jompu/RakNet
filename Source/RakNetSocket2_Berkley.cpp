@@ -10,6 +10,8 @@
 
 #include "EmptyHeader.h"
 
+#include "SocketLayer.h"
+
 #ifdef RAKNET_SOCKET_2_INLINE_FUNCTIONS
 
 #ifndef RAKNETSOCKET2_BERKLEY_CPP
@@ -306,7 +308,9 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 
 
 
-
+		if(bindParameters->dualSocket) {
+			RakNet::SocketLayer::EnableDualStack(rns2Socket, aip->ai_family);
+		}
 
 
 
