@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -316,7 +316,7 @@ struct Lobby2Message
 	/// Print the result of DebugMsg
 	virtual void DebugPrintf(void) const
 	{
-		RakNet::RakString out; DebugMsg(out); printf(out.C_String());
+		RakNet::RakString out; DebugMsg(out);
 	}
 	
 	/// Result of the operation. L2RC_SUCCESS means the result completed. Anything else means an error
@@ -1234,7 +1234,7 @@ struct Client_Login : public Lobby2Message
 	// Input parameters
 	RakNet::RakString userPassword;
 	bool allowMultipleLogins; // PC only, allow login with the same username from multiple computers at once
-	// Used if check 
+	// Used if check
 	RakNet::RakString titleName;
 	RakNet::RakString titleSecretKey;
 	RakNet::RakString userName;
@@ -1957,7 +1957,7 @@ struct Ranking_GetMatches : public Lobby2Message
 	/// \param[out] submittedMatches (excluding binary data, up to caller to deallocate)
 	DataStructures::List<SubmittedMatch> submittedMatches;
 };
-/// \brief Because of the large amount of binary data potentially returned, this function is used to retrieve binary data for a particular match. 
+/// \brief Because of the large amount of binary data potentially returned, this function is used to retrieve binary data for a particular match.
 /// \ingroup LOBBY_2_COMMANDS
 struct Ranking_GetMatchBinaryData : public Lobby2Message
 {
@@ -2344,7 +2344,7 @@ struct Clans_Leave : public Lobby2Message
 
 	// Output parameters
 	bool wasDissolved;
-	RakNet::RakString newClanLeader; // If not dissolved	
+	RakNet::RakString newClanLeader; // If not dissolved
 };
 /// \brief Returns all clans that userHandle is a member of. Clans and clan members should be sorted by name, using ascending or descending sort as specified.
 /// \ingroup LOBBY_2_COMMANDS
@@ -2558,12 +2558,12 @@ struct Clans_AcceptJoinRequest : public Lobby2Message
 	int emailStatus;
 	RakNetSmartPtr<BinaryDataBlock> binaryData;
 	RakNet::RakString requestingUserHandle;
-	bool failIfAlreadyInClan;	
+	bool failIfAlreadyInClan;
 
 	// Output parameters
 };
 /// \brief Rejects a clan join request from requestingUserHandle. Send an email from myPrimaryKey to requestingUserHandle with the specified subject and body.
-/// \details 
+/// \details
 struct Clans_RejectJoinRequest : public Lobby2Message
 {
 	Clans_RejectJoinRequest() {binaryData=RakNet::OP_NEW<BinaryDataBlock>(_FILE_AND_LINE_);}
@@ -2606,7 +2606,7 @@ struct Clans_DownloadRequestList : public Lobby2Message
 	// joinRequestsToMyClan is only filled out for clans you are a leader or subleader in
 	DataStructures::List<ClanJoinRequest> joinRequestsToMyClan, joinRequestsFromMe;
 };
-/// \brief Kicks a user from the clan and/or blacklists a user so they cannot join. Only a clan leader or subleader can perform this operation. The operation can only be performed on members of lower status (leader can perform on subleader or regular member or nonmember, subleader on regular members or nonmember). If a member is banned, they are added to the banned table which contains the member's primary key, which user banned them, and the reason. Email is sent from myPrimaryKey to all leaders if a clan member is banned. Emails is furthermore sent to all clan members if successfully kicked. 
+/// \brief Kicks a user from the clan and/or blacklists a user so they cannot join. Only a clan leader or subleader can perform this operation. The operation can only be performed on members of lower status (leader can perform on subleader or regular member or nonmember, subleader on regular members or nonmember). If a member is banned, they are added to the banned table which contains the member's primary key, which user banned them, and the reason. Email is sent from myPrimaryKey to all leaders if a clan member is banned. Emails is furthermore sent to all clan members if successfully kicked.
 /// \ingroup LOBBY_2_COMMANDS
 struct Clans_KickAndBlacklistUser : public Lobby2Message
 {
@@ -3238,7 +3238,7 @@ struct Notification_Friends_PresenceUpdate : public Lobby2Message
 	virtual bool IsNotification(void) const {return true;}
 	virtual void Serialize( bool writeToBitstream, bool serializeOutput, RakNet::BitStream *bitStream );
 	
-	Lobby2Presence newPresence; 
+	Lobby2Presence newPresence;
 	RakNet::RakString otherHandle;
 };
 /// \ingroup LOBBY_2_NOTIFICATIONS
@@ -3266,7 +3266,7 @@ struct Notification_Friends_CreatedClan : public Lobby2Message
 	virtual void Serialize( bool writeToBitstream, bool serializeOutput, RakNet::BitStream *bitStream );
 
 	RakNet::RakString otherHandle;
-	RakNet::RakString clanName;	
+	RakNet::RakString clanName;
 };
 /// \ingroup LOBBY_2_NOTIFICATIONS
 struct Notification_Emails_Received : public Lobby2Message
@@ -3958,4 +3958,3 @@ struct Lobby2MessageFactory
 } // namespace RakNet
 
 #endif
-
