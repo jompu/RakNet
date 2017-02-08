@@ -675,14 +675,14 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
 		hints.ai_family = AF_INET;
 	else
 		hints.ai_family = AF_UNSPEC;
-	getaddrinfo(ipPart, "", &hints, &servinfo);
+	getaddrinfo(ipPart, NULL, &hints, &servinfo);
 	if (servinfo==0)
 	{
 		if (ipVersion==6)
 		{
 			ipVersion=4;
 			hints.ai_family = AF_UNSPEC;
-			getaddrinfo(ipPart, "", &hints, &servinfo);
+			getaddrinfo(ipPart, NULL, &hints, &servinfo);
 			if (servinfo==0)
 				return false;
 		}
