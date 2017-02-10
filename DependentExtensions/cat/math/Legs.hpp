@@ -30,6 +30,7 @@
 #define CAT_LEGS_HPP
 
 #include <cat/Platform.hpp>
+#include <cat/math/BitMath.hpp>
 
 namespace cat {
 

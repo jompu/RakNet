@@ -65,7 +65,7 @@ void DefaultLogCallback(EventSeverity severity, const char *source, region_ostri
 //// Logging
 
 typedef void (*LogCallback)(EventSeverity severity, const char *source, region_ostringstream &msg);
-
+class Recorder;
 class Logging : public Singleton<Logging>
 {
     CAT_SINGLETON(Logging);

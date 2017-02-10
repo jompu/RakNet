@@ -328,9 +328,9 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 		{
             
 			if (aip->ai_family == AF_INET6) {
-				int no = 0;
+				char no = 0;
 				// Allow mapped IPv4 addresses by disabling IPV6_V6ONLY option.
-				setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no));
+				setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY, &no, sizeof(no));
 			}
             
 			// Is this valid?

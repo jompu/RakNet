@@ -28,6 +28,7 @@
 
 #include <cat/gfx/LoadBitmap.hpp>
 using namespace std;
+using namespace cat;
 
 #ifdef CAT_PRAGMA_PACK
 #pragma pack(push)

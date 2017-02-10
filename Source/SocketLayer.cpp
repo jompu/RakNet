@@ -113,14 +113,14 @@ void PrepareAddrInfoHints(addrinfo *hints)
 
 void SocketLayer::EnableDualStack( int socket, int ai_family) {
 	if (ai_family == AF_INET6) {
-		int no = 0;
+		char no = 0;
 		int result = 0;
 		// Allow mapped IPv4 addresses by disabling IPV6_V6ONLY option.
-		result = setsockopt__(socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no));
+		result = setsockopt__(socket, IPPROTO_IPV6, IPV6_V6ONLY, &no, sizeof(no));
 	
 		RakAssert("setsockopt__ & IPV6_V6ONLY - failed" && result >= 0);
 		
-		int enable = 1;
+		char enable = 1;
 		result = setsockopt__(socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 		
 		RakAssert("setsockopt__ & SO_REUSEADDR - failed" && result >= 0);

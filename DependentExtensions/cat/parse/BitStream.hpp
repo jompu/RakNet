@@ -139,12 +139,12 @@ public:
 
         write_offset += sizeof(T) * 8;
     }
-    template<> void write(s8 data) { write((u8)data); }
-    template<> void write(s16 data) { write((u16)data); }
-    template<> void write(s32 data) { write((u32)data); }
-    template<> void write(s64 data) { write((u64)data); }
-    template<> void write(float data) { write(*(u32*)&data); }
-    template<> void write(double data) { write(*(u64*)&data); }
+    void write(s8 data) { write((u8)data); }
+    void write(s16 data) { write((u16)data); }
+    void write(s32 data) { write((u32)data); }
+    void write(s64 data) { write((u64)data); }
+    void write(float data) { write(*(u32*)&data); }
+    void write(double data) { write(*(u64*)&data); }
 
     void writeBits(u32 data, int count);
     void writeBytes(const void *data, u32 byte_count);
@@ -153,13 +153,15 @@ public:
     // stream-mode insertion
     BitStream &operator<<(const char *data) { writeBytes(data, (u32)strlen(data)); return *this; }
 
-    template<class T> BitStream &operator<<(T data) { write(data); return *this; }
+    template<class T>
+    BitStream &operator<<(T data) { write(data); return *this; }
 
-    template<u32 N_BITS> BitStream &operator<<(const bs_bit::set<N_BITS> &n) { writeBits(n.bits, N_BITS); return *this; }
-    template<> BitStream &operator<<(const bs_bit::set<1> &n) { write1((u8)n.bits); return *this; }
-    template<> BitStream &operator<<(const bs_bit::set<8> &n) { write((u8)n.bits); return *this; }
-    template<> BitStream &operator<<(const bs_bit::set<16> &n) { write((u16)n.bits); return *this; }
-    template<> BitStream &operator<<(const bs_bit::set<32> &n) { write((u32)n.bits); return *this; }
+    template<u32 N_BITS>
+    BitStream &operator<<(const bs_bit::set<N_BITS> &n) { writeBits(n.bits, N_BITS); return *this; }
+    BitStream &operator<<(const bs_bit::set<1> &n) { write1((u8)n.bits); return *this; }
+    BitStream &operator<<(const bs_bit::set<8> &n) { write((u8)n.bits); return *this; }
+    BitStream &operator<<(const bs_bit::set<16> &n) { write((u16)n.bits); return *this; }
+    BitStream &operator<<(const bs_bit::set<32> &n) { write((u32)n.bits); return *this; }
 
     BitStream &operator<<(const bs_byte::set &n) { writeBytes(n.ref, n.bytes); return *this; }
 
@@ -167,7 +169,8 @@ public:
     // extraction
     u8 read1();
 
-    template<class T> void read(T &data)
+    template<class T> 
+    void read(T &data)
     {
         const u32 bits = sizeof(T) * 8;
 
@@ -187,9 +190,10 @@ public:
 
         read_offset += bits;
     }
-    template<> void read(float &data) { read((u32&)data); }
-    template<> void read(double &data) { write(*(u64*)&data); }
-    template<class T> T read() { T temp; read(temp); return temp; }
+    void read(float &data) { read((u32&)data); }
+    void read(double &data) { write(*(u64*)&data); }
+    template<class T> 
+    T read() { T temp; read(temp); return temp; }
 
     u32 readBits(u32 count);
     void readBytes(void *data, u32 byte_count);
@@ -199,10 +203,10 @@ public:
     template<class T> BitStream &operator>>(T &data) { read(data); return *this; }
 
     template<u32 N_BITS> BitStream &operator>>(const bs_bit::get<N_BITS> &n) { n.ref = readBits(N_BITS); return *this; }
-    template<> BitStream &operator>>(const bs_bit::get<1> &n) { n.ref = read1(); return *this; }
-    template<> BitStream &operator>>(const bs_bit::get<8> &n) { n.ref = read<u8>(); return *this; }
-    template<> BitStream &operator>>(const bs_bit::get<16> &n) { n.ref = read<u16>(); return *this; }
-    template<> BitStream &operator>>(const bs_bit::get<32> &n) { read(n.ref); return *this; }
+    BitStream &operator>>(const bs_bit::get<1> &n) { n.ref = read1(); return *this; }
+    BitStream &operator>>(const bs_bit::get<8> &n) { n.ref = read<u8>(); return *this; }
+    BitStream &operator>>(const bs_bit::get<16> &n) { n.ref = read<u16>(); return *this; }
+    BitStream &operator>>(const bs_bit::get<32> &n) { read(n.ref); return *this; }
 
     BitStream &operator>>(const bs_byte::get &n) { readBytes(n.ref, n.bytes); return *this; }
 };

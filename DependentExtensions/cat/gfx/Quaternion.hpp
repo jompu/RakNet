@@ -343,7 +343,7 @@ public:
 	}
 
 	// Get Euler angles
-	vectype Quaternion::getEulerAngles()
+	vectype getEulerAngles()
 	{
 		Double dx = _v(0);
 		Double dy = _v(1);

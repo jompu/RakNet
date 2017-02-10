@@ -26,6 +26,7 @@
 	POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <cat/crypt/SecureCompare.hpp>
 #include <cat/crypt/pass/Passwords.hpp>
 #include <cat/crypt/hash/Skein.hpp>
 #include <cat/lang/Strings.hpp>

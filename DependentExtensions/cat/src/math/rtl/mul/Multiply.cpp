@@ -31,43 +31,6 @@ using namespace cat;
 
 #include "CombaMul.cpp"
 
-// Unrolled schoolbook method with special attention to carries
-// This 4x4 multiply is (slightly) faster than using Comba method
-// An 8x8 Comba multiply is significantly faster than this method
-CAT_INLINE void CAT_FASTCALL SchoolbookMultiply4(const Leg *a, const Leg *b, Leg *output)
-{
-	Leg p0, p1, p2, p3, p4;
-
-	CAT_LEG_MUL(a[0], b[0], p0, output[0]);
-
-	CAT_LEG_MULADD(a[1], b[0], p0, p1, p0);
-	CAT_LEG_MULADD(a[0], b[1], p0, p2, p0);
-	output[1] = p0;
-
-	CAT_LEG_MULADD2(a[2], b[0], p1, p2, p1, p0);
-	CAT_LEG_MULADD(a[1], b[1], p0, p2, p0);
-	CAT_LEG_MULADD(a[0], b[2], p0, p3, p0);
-	output[2] = p0;
-
-	CAT_LEG_MULADD2(a[3], b[0], p1, p2, p1, p0);
-	CAT_LEG_MULADD2(a[2], b[1], p0, p3, p2, p0);
-	CAT_LEG_MULADD(a[1], b[2], p0, p3, p0);
-	CAT_LEG_MULADD(a[0], b[3], p0, p4, p0);
-	output[3] = p0;
-
-	CAT_LEG_MULADD2(a[3], b[1], p1, p2, p1, p0);
-	CAT_LEG_MULADD2(a[2], b[2], p0, p3, p2, p0);
-	CAT_LEG_MULADD2(a[1], b[3], p0, p4, p3, p0);
-	output[4] = p0;
-
-	CAT_LEG_MULADD2(a[3], b[2], p1, p2, p1, p0);
-	CAT_LEG_MULADD2(a[2], b[3], p0, p3, p2, p0);
-	output[5] = p0;
-
-	CAT_LEG_MULADD2(a[3], b[3], p1, p2, p1, p0);
-	output[6] = p0;
-	output[7] = p1;
-}
 
 void CAT_FASTCALL BigRTL::Multiply(const Leg *in_a, const Leg *in_b, Leg *out)
 {

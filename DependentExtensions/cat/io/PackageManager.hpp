@@ -30,7 +30,8 @@
 #define CAT_PACKAGE_MANAGER_HPP
 
 #include <cat/Platform.hpp>
-#include <cat/port/FastDelegate.h>
+#include <cat/parse/FastDelegate.h>
+#include <cat/io/ThreadPoolFiles.hpp>
 
 namespace cat {
 
@@ -77,6 +78,7 @@ namespace cat {
 	in-place modification to a large datafile (>4 GB).
 */
 
+
 class KennelPatchFile : AsyncFile
 {
 public:
@@ -84,7 +86,7 @@ public:
 	~KennelPatchFile();
 
 public:
-	void Insert
+	void Insert();
 };
 
 

@@ -353,12 +353,13 @@ namespace cat {
 #endif
 
 // Detect CYGWIN environment
-#if defined(__CYGWIN__) || defined(__CYGWIN32__)
+#if defined(__CYGWIN__) || defined(__CYGWIN32__) 
 # define CAT_CYGWIN
 #endif
 
 // DLL import/export macros based on OS
 #if defined(CAT_OS_WINDOWS) || defined(CAT_CYGWIN)
+
 
 # if defined(CAT_NEUTER_EXPORT)
 #  define CAT_EXPORT /* Do not import or export any symbols */
