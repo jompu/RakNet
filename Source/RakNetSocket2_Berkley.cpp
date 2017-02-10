@@ -328,9 +328,14 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6( RNS2_BerkleyBindParameters *bin
 		{
             
 			if (aip->ai_family == AF_INET6) {
-				int no = 0;
 				// Allow mapped IPv4 addresses by disabling IPV6_V6ONLY option.
+#if defined(__MINGW32__)
+				char no = 0;
+				setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY, &no, sizeof(no));
+#else
+				int no = 0;
 				setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY, (void *)&no, sizeof(no));
+#endif
 			}
             
 			// Is this valid?
@@ -399,7 +404,7 @@ void RNS2_Berkley::RecvFromBlockingIPV4And6(RNS2RecvStruct *recvFromStruct)
 	if (recvFromStruct->bytesRead==-1)
 	{
 		DWORD dwIOError = GetLastError();
-		if (dwIoError != 10035)
+		if (dwIOError != 10035)
 		{
 			LPVOID messageBuffer;
 			FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
