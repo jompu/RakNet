@@ -140,7 +140,7 @@ struct DatagramHeaderFormat
 			sizeof(float)*1;
 	}
 
-	void Serialize(RakNet::BitStream *b)
+	void SerializeHeaderStream(RakNet::BitStream *b)
 	{
 		// Not endian safe
 		//		RakAssert(GetDataHeaderByteLength()==sizeof(DatagramHeaderFormat));
@@ -181,7 +181,7 @@ struct DatagramHeaderFormat
 			b->Write(datagramNumber);
 		}
 	}
-	void Deserialize(RakNet::BitStream *b)
+	void DeserializeHeaderStream(RakNet::BitStream *b)
 	{
 		// Not endian safe
 		//		b->ReadAlignedBytes((unsigned char*) this, sizeof(DatagramHeaderFormat));
@@ -691,7 +691,7 @@ bool ReliabilityLayer::HandleSocketReceiveFromConnectedPlayer(
 	// 		timeResendQueueNonEmpty=timeRead;
 
 	DatagramHeaderFormat dhf;
-	dhf.Deserialize(&socketData);
+	dhf.DeserializeHeaderStream(&socketData);
 	if (dhf.isValid==false)
 	{
 		for (unsigned int messageHandlerIndex=0; messageHandlerIndex < messageHandlerList.Size(); messageHandlerIndex++)
@@ -1825,7 +1825,7 @@ void ReliabilityLayer::Update( RakNetSocket2 *s, SystemAddress &systemAddress, i
 		dhfNAK.isNAK=true;
 		dhfNAK.isACK=false;
 		dhfNAK.isPacketPair=false;
-		dhfNAK.Serialize(&updateBitStream);
+		dhfNAK.SerializeHeaderStream(&updateBitStream);
 		NAKs.Serialize(&updateBitStream, GetMaxDatagramSizeExcludingMessageHeaderBits(), true);
 		SendBitStream( s, systemAddress, &updateBitStream, rnr, time );
 	}
@@ -2171,7 +2171,7 @@ void ReliabilityLayer::Update( RakNetSocket2 *s, SystemAddress &systemAddress, i
 			dhf.sourceSystemTime=RakNet::GetTimeUS();
 #endif
 			updateBitStream.Reset();
-			dhf.Serialize(&updateBitStream);
+			dhf.SerializeHeaderStream(&updateBitStream);
 			CC_DEBUG_PRINTF_2("S%i ",dhf.datagramNumber.val);
 
 			while (msgIndex < msgTerm)
@@ -3658,7 +3658,7 @@ void ReliabilityLayer::SendACKs(RakNetSocket2 *s, SystemAddress &systemAddress, 
 #endif
 		//		dhf.B=(float)B;
 		updateBitStream.Reset();
-		dhf.Serialize(&updateBitStream);
+		dhf.SerializeHeaderStream(&updateBitStream);
 		CC_DEBUG_PRINTF_1("AckSnd ");
 		acknowlegements.Serialize(&updateBitStream, maxDatagramPayload, true);
 		SendBitStream( s, systemAddress, &updateBitStream, rnr, time );
