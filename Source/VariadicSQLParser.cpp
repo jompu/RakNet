@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -19,7 +19,7 @@ struct TypeMapping
 	char inputType;
 	const char *type;
 };
-const int NUM_TYPE_MAPPINGS=7;
+const int NUM_TYPE_MAPPINGS=8;
 TypeMapping typeMappings[NUM_TYPE_MAPPINGS] =
 {
 	{'i', "int"},
@@ -29,6 +29,7 @@ TypeMapping typeMappings[NUM_TYPE_MAPPINGS] =
 	{'f', "numeric"},
 	{'g', "double precision"},
 	{'a', "bytea"},
+	{'j', "json"},
 };
 unsigned int GetTypeMappingIndex(char c)
 {
@@ -141,6 +142,14 @@ void VariadicSQLParser::ExtractArguments( va_list argptr, const DataStructures::
 				paramLength[i]=va_arg( argptr, unsigned int );
 				paramData[i]=(char*) rakMalloc_Ex(paramLength[i], _FILE_AND_LINE_);
 				memcpy(paramData[i], val, paramLength[i]);
+			}
+			break;
+		case 'j':
+			{
+				char* val = va_arg( argptr, char* );
+				paramLength[i]=(int) strlen(val);
+				paramData[i]=(char*) rakMalloc_Ex(paramLength[i]+1, _FILE_AND_LINE_);
+				memcpy(paramData[i], val, paramLength[i]+1);
 			}
 			break;
 		}
