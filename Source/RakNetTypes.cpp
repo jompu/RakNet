@@ -607,7 +607,7 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
 		return true;
 	}
 #if RAKNET_SUPPORT_IPV6==1
-	char ipPart[INET6_ADDRSTRLEN];
+	char ipPart[INET6_ADDRSTRLEN + 32];
 #else
 	char ipPart[INET_ADDRSTRLEN];
 #endif
@@ -675,14 +675,16 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
 		hints.ai_family = AF_INET;
 	else
 		hints.ai_family = AF_UNSPEC;
-	getaddrinfo(ipPart, NULL, &hints, &servinfo);
+		
+	int err=0;
+	err = getaddrinfo(ipPart, NULL, &hints, &servinfo);
 	if (servinfo==0)
 	{
 		if (ipVersion==6)
 		{
 			ipVersion=4;
 			hints.ai_family = AF_UNSPEC;
-			getaddrinfo(ipPart, NULL, &hints, &servinfo);
+			err = getaddrinfo(ipPart, NULL, &hints, &servinfo);
 			if (servinfo==0)
 				return false;
 		}
