@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -289,7 +289,7 @@ void RakNet::GetFriendInfosByStatus(unsigned int callerUserId, RakNet::RakString
 	}
 	query+=" AND actionId_fk=(SELECT actionId_pk FROM lobby2.friendActions where description='";
 	query+=status;
-	query+="');"; 
+	query+="');";
 
 	PGresult *result = pgsql->QueryVariadic( query.C_String(), callerUserId );
 	RakAssert(result);
@@ -586,7 +586,7 @@ bool RakNet::System_CreateTitle_PGSQL::ServerDBImpl( Lobby2ServerCommand *comman
 		binaryData->binaryDataLength);
 	if (result!=0)
 	{
-		PQclear(result);		
+		PQclear(result);
 		resultCode=L2RC_SUCCESS;
 	}
 	else
@@ -605,7 +605,7 @@ bool RakNet::System_DestroyTitle_PGSQL::ServerDBImpl( Lobby2ServerCommand *comma
 	result = pgsql->QueryVariadic("DELETE FROM lobby2.titles WHERE titlename_pk=%s", titleName.C_String());
 	if (result!=0)
 	{
-		PQclear(result);		
+		PQclear(result);
 		resultCode=L2RC_SUCCESS;
 	}
 	else
@@ -1475,6 +1475,8 @@ bool RakNet::Client_UpdateAccount_PGSQL::ServerDBImpl( Lobby2ServerCommand *comm
 		resultCode=L2RC_DATABASE_CONSTRAINT_FAILURE;
 		return true;
 	}
+	
+	PQclear(result);
 
 	UpdateAccountFromMissingCreationParameters(createAccountParameters, command->callerUserId, command, pgsql);
 
@@ -2201,7 +2203,7 @@ bool RakNet::Friends_Remove_PGSQL::ServerDBImpl( Lobby2ServerCommand *command, v
 	}
 
 	// Bidirectional delete
-	result = pgsql->QueryVariadic("DELETE FROM lobby2.friends WHERE (userOne_fk=%i AND userTwo_fk=%i) OR (userOne_fk=%i AND userTwo_fk=%i)", 
+	result = pgsql->QueryVariadic("DELETE FROM lobby2.friends WHERE (userOne_fk=%i AND userTwo_fk=%i) OR (userOne_fk=%i AND userTwo_fk=%i)",
 		command->callerUserId, targetUserId, targetUserId, command->callerUserId);
 	RakAssert(result);
 	PQclear(result);
@@ -2431,7 +2433,7 @@ bool RakNet::Emails_Get_PGSQL::ServerDBImpl( Lobby2ServerCommand *command, void 
 					emailResult.sender=otherHandle;
 					emailResult.recipient=myHandle;
 				}
-			}		
+			}
 			emailResults.Insert(emailResult, __FILE__, __LINE__ );
 		}
 		emailResults.Insert(emailResult, _FILE_AND_LINE_ );
@@ -3671,7 +3673,7 @@ bool RakNet::Clans_SendJoinInvitation_PGSQL::ServerDBImpl( Lobby2ServerCommand *
 	notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 	notification->clanHandle=clanHandle;
 	notification->targetHandle=targetHandle;
-	notification->sourceHandle=command->callingUserName;		
+	notification->sourceHandle=command->callingUserName;
 	notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_INVITATION;
 	notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_SENT;
 	command->server->AddOutputFromThread(notification, targetId, targetHandle); // target
@@ -3688,7 +3690,7 @@ bool RakNet::Clans_SendJoinInvitation_PGSQL::ServerDBImpl( Lobby2ServerCommand *
 		notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 		notification->clanHandle=clanHandle;
 		notification->targetHandle=targetHandle;
-		notification->sourceHandle=command->callingUserName;		
+		notification->sourceHandle=command->callingUserName;
 		notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_INVITATION;
 		notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_SENT;
 		command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
@@ -3750,7 +3752,7 @@ bool RakNet::Clans_WithdrawJoinInvitation_PGSQL::ServerDBImpl( Lobby2ServerComma
 	notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 	notification->clanHandle=clanHandle;
 	notification->targetHandle=targetHandle;
-	notification->sourceHandle=command->callingUserName;		
+	notification->sourceHandle=command->callingUserName;
 	notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_INVITATION;
 	notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_WITHDRAWN;
 	command->server->AddOutputFromThread(notification, targetId, targetHandle); // target
@@ -3770,7 +3772,7 @@ bool RakNet::Clans_WithdrawJoinInvitation_PGSQL::ServerDBImpl( Lobby2ServerComma
 		notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 		notification->clanHandle=clanHandle;
 		notification->targetHandle=targetHandle;
-		notification->sourceHandle=command->callingUserName;		
+		notification->sourceHandle=command->callingUserName;
 		notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_INVITATION;
 		notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_WITHDRAWN;
 		command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
@@ -3831,7 +3833,7 @@ bool RakNet::Clans_AcceptJoinInvitation_PGSQL::ServerDBImpl( Lobby2ServerCommand
 
 		Notification_Clans_NewClanMember *notification = (Notification_Clans_NewClanMember *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_NewClanMember);
 		notification->clanHandle=clanHandle;
-		notification->targetHandle=command->callingUserName;	
+		notification->targetHandle=command->callingUserName;
 		command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
 
 	}
@@ -3884,7 +3886,7 @@ bool RakNet::Clans_RejectJoinInvitation_PGSQL::ServerDBImpl( Lobby2ServerCommand
 
 		Notification_Clans_PendingJoinStatus *notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 		notification->clanHandle=clanHandle;
-		notification->sourceHandle=command->callingUserName;		
+		notification->sourceHandle=command->callingUserName;
 		notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_INVITATION;
 		notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_WITHDRAWN;
 		command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
@@ -4021,7 +4023,7 @@ bool RakNet::Clans_SendJoinRequest_PGSQL::ServerDBImpl( Lobby2ServerCommand *com
 
 			Notification_Clans_NewClanMember *notification = (Notification_Clans_NewClanMember *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_NewClanMember);
 			notification->clanHandle=clanHandle;
-			notification->targetHandle=command->callingUserName;	
+			notification->targetHandle=command->callingUserName;
 			command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name);
 		}
 
@@ -4055,7 +4057,7 @@ bool RakNet::Clans_SendJoinRequest_PGSQL::ServerDBImpl( Lobby2ServerCommand *com
 			Notification_Clans_PendingJoinStatus *notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 			notification->clanHandle=clanHandle;
 			notification->targetHandle=clanMembers[i].name;
-			notification->sourceHandle=command->callingUserName;		
+			notification->sourceHandle=command->callingUserName;
 			notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_REQUEST;
 			notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_SENT;
 			command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
@@ -4118,7 +4120,7 @@ bool RakNet::Clans_WithdrawJoinRequest_PGSQL::ServerDBImpl( Lobby2ServerCommand 
 		Notification_Clans_PendingJoinStatus *notification = (Notification_Clans_PendingJoinStatus *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_PendingJoinStatus);
 		notification->clanHandle=clanHandle;
 		notification->targetHandle=clanMembers[i].name;
-		notification->sourceHandle=command->callingUserName;		
+		notification->sourceHandle=command->callingUserName;
 		notification->majorOp=Notification_Clans_PendingJoinStatus::JOIN_CLAN_REQUEST;
 		notification->minorOp=Notification_Clans_PendingJoinStatus::JOIN_WITHDRAWN;
 		command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
@@ -4219,7 +4221,7 @@ bool RakNet::Clans_AcceptJoinRequest_PGSQL::ServerDBImpl( Lobby2ServerCommand *c
 
 		Notification_Clans_NewClanMember *notification = (Notification_Clans_NewClanMember *) command->server->GetMessageFactory()->Alloc(L2MID_Notification_Clans_NewClanMember);
 		notification->clanHandle=clanHandle;
-		notification->targetHandle=requestingUserHandle;	
+		notification->targetHandle=requestingUserHandle;
 		command->server->AddOutputFromThread(notification, clanMembers[i].userId, clanMembers[i].name); // subleader
 	}
 
@@ -4677,7 +4679,3 @@ bool RakNet::Clans_GetList_PGSQL::ServerDBImpl( Lobby2ServerCommand *command, vo
 	resultCode=L2RC_SUCCESS;
 	return true;
 }
-
-
-
-
