@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -356,7 +356,7 @@ void PendingInvite::Serialize(bool writeToBitstream, BitStream *bitStream)
 	bitStream->Serialize(writeToBitstream, sender);
 	bitStream->Serialize(writeToBitstream, subject);
 	bitStream->Serialize(writeToBitstream, body);
-	binaryData->Serialize(writeToBitstream, bitStream);		
+	binaryData->Serialize(writeToBitstream, bitStream);
 }
 
 FriendInfo::FriendInfo() {}
@@ -563,7 +563,7 @@ void System_UnbanUser::Serialize( bool writeToBitstream, bool serializeOutput, B
 
 bool System_UnbanUser::PrevalidateInput( void )
 {
-	if (!ValidateHandle(&userName)) return false;	
+	if (!ValidateHandle(&userName)) return false;
 	if (!ValidateRequiredText(&reason)) return false;
 	return true;
 }
@@ -644,7 +644,7 @@ void CDKey_FlagStolen::Serialize( bool writeToBitstream, bool serializeOutput, B
 
 bool CDKey_FlagStolen::PrevalidateInput( void )
 {
-//	
+//
 	if (!ValidateRequiredText(&cdKey)) return false;
 	if (!ValidateRequiredText(&titleName)) return false;
 	return true;
@@ -761,7 +761,7 @@ void Client_GetEmailAddress::Serialize( bool writeToBitstream, bool serializeOut
 	{
 		bitStream->Serialize(writeToBitstream,emailAddress);
 		bitStream->Serialize(writeToBitstream,emailAddressValidated);
-	}	
+	}
 }
 bool Client_GetPasswordRecoveryQuestionByHandle::PrevalidateInput(void)
 {
@@ -819,11 +819,11 @@ void Client_UpdateAccount::Serialize( bool writeToBitstream, bool serializeOutpu
 
 bool Client_UpdateAccount::PrevalidateInput( void )
 {
-	if (!ValidateHandle(&createAccountParameters.firstName)) return false;
-	if (!ValidateHandle(&createAccountParameters.lastName)) return false;
-	if (!ValidatePassword(&createAccountParameters.password)) return false;
-	if (!ValidateRequiredText(&createAccountParameters.passwordRecoveryQuestion)) return false;
-	if (!ValidateRequiredText(&createAccountParameters.passwordRecoveryAnswer)) return false;
+	//if (!ValidateHandle(&createAccountParameters.firstName)) return false;
+	//if (!ValidateHandle(&createAccountParameters.lastName)) return false;
+	//if (!ValidatePassword(&createAccountParameters.password)) return false;
+	//if (!ValidateRequiredText(&createAccountParameters.passwordRecoveryQuestion)) return false;
+	//if (!ValidateRequiredText(&createAccountParameters.passwordRecoveryAnswer)) return false;
 	return true;
 }
 
@@ -1376,7 +1376,7 @@ void Ranking_UpdateRating::Serialize( bool writeToBitstream, bool serializeOutpu
 }
 
 bool Ranking_UpdateRating::PrevalidateInput( void )
-{	
+{
 	if (!ValidateRequiredText(&titleName)) return false;
 	if (!ValidateRequiredText(&gameType)) return false;
 	if (!ValidateHandle(&targetHandle)) return false;
@@ -2223,7 +2223,7 @@ void RakNet::Notification_Clans_PendingJoinStatus::Serialize( bool writeToBitstr
 	bitStream->Serialize(writeToBitstream, clanHandle);
 	bitStream->Serialize(writeToBitstream, sourceHandle);
 	bitStream->Serialize(writeToBitstream, targetHandle);
-	bitStream->Serialize(writeToBitstream, clanMemberHandle);	
+	bitStream->Serialize(writeToBitstream, clanMemberHandle);
 	unsigned char c1 = (unsigned char) majorOp;
 	unsigned char c2 = (unsigned char) minorOp;
 	bitStream->Serialize(writeToBitstream, c1);
