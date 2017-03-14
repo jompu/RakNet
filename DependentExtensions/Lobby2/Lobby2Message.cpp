@@ -268,7 +268,7 @@ bool Lobby2Message::ValidatePassword( RakString *text )
 	}
 
 	size_t len = text->GetLength();
-	if (len>50)
+	if (len>120)
 	{
 		resultCode=L2RC_PASSWORD_IS_TOO_LONG;
 		return false;
