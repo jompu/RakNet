@@ -210,45 +210,51 @@ bool Lobby2Message::ValidateBinary( RakNetSmartPtr<BinaryDataBlock>binaryDataBlo
 
 	return true;
 }
-bool Lobby2Message::ValidateHandle( RakString *handle )
+Lobby2ResultCode Lobby2Message::ValidateHandleStatic( RakString *handle )
 {
 	if (handle->IsEmpty())
 	{
-		resultCode=L2RC_HANDLE_IS_EMPTY;
-		return false;
+		return L2RC_HANDLE_IS_EMPTY;
 	}
 	if (handle->C_String()[0]==' ')
 	{
-		resultCode=L2RC_HANDLE_STARTS_WITH_SPACES;
-		return false;
+		return L2RC_HANDLE_STARTS_WITH_SPACES;
 	}
 	size_t len = handle->GetLength();
 	if (handle->C_String()[len-1]==' ')
 	{
-		resultCode=L2RC_HANDLE_ENDS_WITH_SPACES;
-		return false;
+		return L2RC_HANDLE_ENDS_WITH_SPACES;
 	}
 	if (len>50)
 	{
-		resultCode=L2RC_HANDLE_IS_TOO_LONG;
-		return false;
+		return L2RC_HANDLE_IS_TOO_LONG;
 	}
 	if (len<=2)
 	{
-		resultCode=L2RC_HANDLE_IS_TOO_SHORT;
-		return false;
+		return L2RC_HANDLE_IS_TOO_SHORT;
 	}
 	if (handle->ContainsNonprintableExceptSpaces())
 	{
-		resultCode=L2RC_HANDLE_CONTAINS_NON_PRINTABLE;
-		return false;
+		return L2RC_HANDLE_CONTAINS_NON_PRINTABLE;
 	}
 	if (strstr(handle->C_String(), "  ")!=0)
 	{
-		resultCode=L2RC_HANDLE_HAS_CONSECUTIVE_SPACES;
-		return false;
+		return L2RC_HANDLE_HAS_CONSECUTIVE_SPACES;
 	}
-	return true;
+	return L2RC_SUCCESS;
+}
+bool Lobby2Message::ValidateHandle( RakString *handle )
+{
+	auto result = Lobby2Message::ValidateHandleStatic(handle);
+	
+	if (result == L2RC_SUCCESS) {
+		return true;
+	}
+	else {
+		resultCode = result;
+	}
+	
+	return false;
 }
 bool Lobby2Message::ValidateRequiredText( RakString *text )
 {
@@ -259,41 +265,62 @@ bool Lobby2Message::ValidateRequiredText( RakString *text )
 	}
 	return true;
 }
-bool Lobby2Message::ValidatePassword( RakString *text )
+Lobby2ResultCode Lobby2Message::ValidatePasswordStatic( RakString *text )
 {
 	if (text->IsEmpty())
 	{
-		resultCode=L2RC_PASSWORD_IS_EMPTY;
-		return false;
+		return L2RC_PASSWORD_IS_EMPTY;
 	}
 
 	size_t len = text->GetLength();
 	if (len>120)
 	{
-		resultCode=L2RC_PASSWORD_IS_TOO_LONG;
-		return false;
+		return L2RC_PASSWORD_IS_TOO_LONG;
 	}
 	if (len<4)
 	{
-		resultCode=L2RC_PASSWORD_IS_TOO_SHORT;
-		return false;
+		return L2RC_PASSWORD_IS_TOO_SHORT;
 	}
 
-	return true;
+	return L2RC_SUCCESS;
 }
-bool Lobby2Message::ValidateEmailAddress( RakString *text )
+bool Lobby2Message::ValidatePassword( RakString *text )
+{
+	auto result = Lobby2Message::ValidatePasswordStatic(text);
+	
+	if (result == L2RC_SUCCESS) {
+		return true;
+	}
+	else {
+		resultCode = result;
+	}
+	
+	return false;
+}
+Lobby2ResultCode Lobby2Message::ValidateEmailAddressStatic( RakString *text )
 {
 	if (text->IsEmpty())
 	{
-		resultCode=L2RC_EMAIL_ADDRESS_IS_EMPTY;
-		return false;
+		return L2RC_EMAIL_ADDRESS_IS_EMPTY;
 	}
 	if (text->IsEmailAddress()==false)
 	{
-		resultCode=L2RC_EMAIL_ADDRESS_IS_INVALID;
-		return false;
+		return L2RC_EMAIL_ADDRESS_IS_INVALID;
 	}
-	return true;
+	return L2RC_SUCCESS;
+}
+bool Lobby2Message::ValidateEmailAddress( RakString *text )
+{
+	auto result = Lobby2Message::ValidateEmailAddressStatic(text);
+	
+	if (result == L2RC_SUCCESS) {
+		return true;
+	}
+	else {
+		resultCode = result;
+	}
+	
+	return false;
 }
 bool Lobby2Message::PrevalidateInput(void) {return true;}
 bool Lobby2Message::ClientImpl( RakNet::Lobby2Plugin *client) { (void)client; return true; }

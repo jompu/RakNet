@@ -293,6 +293,7 @@ struct Lobby2Message
 	/// Cannot start with space
 	/// Cannot end with space
 	/// Cannot have two spaces in a row
+	static Lobby2ResultCode ValidateHandleStatic( RakString *handle );
 	bool ValidateHandle( RakNet::RakString *handle );
 
 	/// Binary data cannot be longer than L2_MAX_BINARY_DATA_LENGTH
@@ -302,9 +303,11 @@ struct Lobby2Message
 	bool ValidateRequiredText( RakNet::RakString *text );
 
 	/// Passwords must contain at least 5 characters
+	static Lobby2ResultCode ValidatePasswordStatic( RakString *text );
 	bool ValidatePassword( RakNet::RakString *text );
-
+	
 	/// Check email address format
+	static Lobby2ResultCode ValidateEmailAddressStatic( RakString *text );
 	bool ValidateEmailAddress( RakNet::RakString *text );
 
 	/// Convert the enumeration representing this message to a string, and return it. Done automatically by macros.
