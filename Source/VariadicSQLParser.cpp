@@ -19,11 +19,12 @@ struct TypeMapping
 	char inputType;
 	const char *type;
 };
-const int NUM_TYPE_MAPPINGS=8;
+const int NUM_TYPE_MAPPINGS=9;
 TypeMapping typeMappings[NUM_TYPE_MAPPINGS] =
 {
 	{'i', "int"},
 	{'d', "int"},
+	{'l', "bigint"},
 	{'s', "text"},
 	{'b', "bool"},
 	{'f', "numeric"},
@@ -89,6 +90,15 @@ void VariadicSQLParser::ExtractArguments( va_list argptr, const DataStructures::
 		case 'd':
 			{
 				int val = va_arg( argptr, int );
+				paramLength[i]=sizeof(val);
+				paramData[i]=(char*) rakMalloc_Ex(paramLength[i], _FILE_AND_LINE_);
+				memcpy(paramData[i], &val, paramLength[i]);
+				if (RakNet::BitStream::IsNetworkOrder()==false) RakNet::BitStream::ReverseBytesInPlace((unsigned char*) paramData[i], paramLength[i]);
+			}
+			break;
+		case 'l':
+			{
+				long long val = va_arg( argptr, long long );
 				paramLength[i]=sizeof(val);
 				paramData[i]=(char*) rakMalloc_Ex(paramLength[i], _FILE_AND_LINE_);
 				memcpy(paramData[i], &val, paramLength[i]);
