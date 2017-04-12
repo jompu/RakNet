@@ -233,10 +233,10 @@ Lobby2ResultCode Lobby2Message::ValidateHandleStatic( RakString *handle )
 	{
 		return L2RC_HANDLE_IS_TOO_SHORT;
 	}
-	if (handle->ContainsNonprintableExceptSpaces())
+	/*if (handle->ContainsNonprintableExceptSpaces())
 	{
 		return L2RC_HANDLE_CONTAINS_NON_PRINTABLE;
-	}
+	}*/
 	if (strstr(handle->C_String(), "  ")!=0)
 	{
 		return L2RC_HANDLE_HAS_CONSECUTIVE_SPACES;
