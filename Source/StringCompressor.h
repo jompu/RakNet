@@ -22,9 +22,7 @@
 #include "RakMemoryOverride.h"
 #include "NativeTypes.h"
 
-#ifdef _STD_STRING_COMPRESSOR
 #include <string>
-#endif
 
 /// Forward declaration
 namespace RakNet
@@ -81,10 +79,8 @@ public:
 	bool DecodeString( CString &output, int maxCharsToWrite, RakNet::BitStream *input, uint8_t languageId=0 );
 #endif
 
-#ifdef _STD_STRING_COMPRESSOR
 	void EncodeString( const std::string &input, int maxCharsToWrite, RakNet::BitStream *output, uint8_t languageId=0 );
 	bool DecodeString( std::string *output, int maxCharsToWrite, RakNet::BitStream *input, uint8_t languageId=0 );
-#endif
 
 	void EncodeString( const RakNet::RakString *input, int maxCharsToWrite, RakNet::BitStream *output, uint8_t languageId=0 );
 	bool DecodeString( RakNet::RakString *output, int maxCharsToWrite, RakNet::BitStream *input, uint8_t languageId=0 );

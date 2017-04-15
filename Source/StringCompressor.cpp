@@ -439,7 +439,6 @@ bool StringCompressor::DecodeString( CString &output, int maxCharsToWrite, RakNe
 
 }
 #endif
-#ifdef _STD_STRING_COMPRESSOR
 void StringCompressor::EncodeString( const std::string &input, int maxCharsToWrite, RakNet::BitStream *output, uint8_t languageId )
 {
 	EncodeString(input.c_str(), maxCharsToWrite, output, languageId);
@@ -473,7 +472,6 @@ bool StringCompressor::DecodeString( std::string *output, int maxCharsToWrite, R
 
 	return out;
 }
-#endif
 void StringCompressor::EncodeString( const RakString *input, int maxCharsToWrite, RakNet::BitStream *output, uint8_t languageId )
 {
 	EncodeString(input->C_String(), maxCharsToWrite, output, languageId);

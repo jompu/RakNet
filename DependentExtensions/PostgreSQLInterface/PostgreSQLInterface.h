@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -19,6 +19,8 @@ typedef struct pg_result PGresult;
 
 #include "RakString.h"
 #include "DS_OrderedList.h"
+
+#include <string>
 
 class PostgreSQLInterface
 {
@@ -57,6 +59,7 @@ public:
 	static bool PQGetValueFromBinary(double *output, PGresult *result, int rowIndex, const char *columnName);
 	static bool PQGetValueFromBinary(bool *output, PGresult *result, int rowIndex, const char *columnName);
 	static bool PQGetValueFromBinary(RakNet::RakString *output, PGresult *result, int rowIndex, const char *columnName);
+	static bool PQGetValueFromBinary(std::string *output, PGresult *result, int rowIndex, const char *columnName);
 	static bool PQGetValueFromBinary(char **output, unsigned int *outputLength, PGresult *result, int rowIndex, const char *columnName);
 	static bool PQGetValueFromBinary(char **output, int *outputLength, PGresult *result, int rowIndex, const char *columnName);
 
@@ -85,7 +88,7 @@ public:
 	void Rollback(void);
 	static void EndianSwapInPlace(char* data, int dataLength);
 	RakNet::RakString GetEscapedString(const char *input) const;
-protected:	
+protected:
 
 	PGconn *pgConn;
 	bool pgConnAllocatedHere;

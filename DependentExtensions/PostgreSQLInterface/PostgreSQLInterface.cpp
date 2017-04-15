@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -158,7 +158,7 @@ bool PostgreSQLInterface::PQGetValueFromBinary(unsigned int *output, PGresult *r
 	int columnIndex = PQfnumber(result, columnName); if (columnIndex==-1) return false;
 	char *binaryData = PQgetvalue(result, rowIndex, columnIndex);
 	if (binaryData==0 || PQgetlength(result, rowIndex, columnIndex)==0)
-		return false;	
+		return false;
 	if (binaryData)
 	{
 		RakAssert(PQgetlength(result, rowIndex, columnIndex)==sizeof(unsigned int));
@@ -252,6 +252,17 @@ bool PostgreSQLInterface::PQGetValueFromBinary(RakNet::RakString *output, PGresu
 	else
 		output->Clear();
 	return output->IsEmpty()==false;
+}
+bool PostgreSQLInterface::PQGetValueFromBinary(std::string *output, PGresult *result, int rowIndex, const char *columnName)
+{
+	int columnIndex = PQfnumber(result, columnName); if (columnIndex==-1) return false;
+	char *gv;
+	gv = PQgetvalue(result, rowIndex, columnIndex);
+	if (gv && gv[0])
+		*output=gv;
+	else
+		output->erase();
+	return output->empty()==false;
 }
 bool PostgreSQLInterface::PQGetValueFromBinary(char **output, unsigned int *outputLength, PGresult *result, int rowIndex, const char *columnName)
 {
@@ -508,13 +519,13 @@ void PostgreSQLInterface::EncodeQueryInput(const char *colName, const char *str,
 		{
 			paramData[numParams]=emptyStr;
 			paramLength[numParams]=0;
-		}		
+		}
 	}
 	else
 	{
 		paramData[numParams]=(char*) str;
 		paramLength[numParams]=(int) strlen(str);
-	}	
+	}
 	paramFormat[numParams]=PQEXECPARAM_FORMAT_TEXT;
 	numParams++;
 }
