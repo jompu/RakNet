@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -105,7 +105,7 @@ void Lobby2Server::Update(void)
 						if (users[i]->callerUserId==c.callerUserId)
 						{
 							c.callerSystemAddresses=users[i]->systemAddresses;
-							c.callerGuids=users[i]->guids;		
+							c.callerGuids=users[i]->guids;
 
 							/*
 							if (c.requiredConnectionAddress!=UNASSIGNED_SYSTEM_ADDRESS)
@@ -144,7 +144,7 @@ void Lobby2Server::Update(void)
 				bool objectExists;
 				unsigned int idx;
 				idx = users.GetIndexFromKey(c.callingUserName,&objectExists);
-				if (objectExists && 
+				if (objectExists &&
 					c.callingUserName.IsEmpty()==false &&
 					users[idx]->userName!=c.callingUserName)
 				{
@@ -164,7 +164,7 @@ PluginReceiveResult Lobby2Server::OnReceive(Packet *packet)
 {
 	RakAssert(packet);
 
-	switch (packet->data[0]) 
+	switch (packet->data[0])
 	{
 	case ID_LOBBY2_SEND_MESSAGE:
 		OnMessage(packet);
@@ -212,7 +212,7 @@ void Lobby2Server::OnClosedConnection(const SystemAddress &systemAddress, RakNet
 			ExecuteCommand(&command);
 
 			RemoveUser(index);
-		}		
+		}
 	}
 }
 void Lobby2Server::OnMessage(Packet *packet)
@@ -471,6 +471,8 @@ void Lobby2Server::OnLogin(Lobby2ServerCommand *command, bool calledFromThread)
 	}
 	else
 	{
+		// Allow multiple logins from same GUID/Address with different usernames.
+		return;/*
 		// Different username, from the same IP address or RakNet instance
 		unsigned int idx2 = GetUserIndexByGUID(command->callerGuids[0]);
 		unsigned int idx3 = GetUserIndexBySystemAddress(command->callerSystemAddresses[0]);
@@ -499,7 +501,7 @@ void Lobby2Server::OnLogin(Lobby2ServerCommand *command, bool calledFromThread)
 			users.RemoveAtIndex(idx3);
 
 			insertionIndex = users.GetIndexFromKey(command->callingUserName, &objectExists);
-		}
+		}*/
 	}
 
 
